@@ -1,0 +1,11 @@
+{
+  "firstname": "ex",
+  "lastname": "xample",
+  "dni": 123,
+  "tel": 123,
+  "email": "e@mail.com",
+  "direction": {
+    "name": "pedro alfalfa",
+    "number": 23
+  }
+}
