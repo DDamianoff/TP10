@@ -1,3 +1,5 @@
 # Project exclude paths
 /src/scripts/app.js
 /src/scripts/app.js.map
+/src/scripts/class.js
+/src/scripts/class.js.map

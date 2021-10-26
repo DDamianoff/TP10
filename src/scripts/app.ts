@@ -1,43 +1,32 @@
-class MainDB {
-    private readonly DBKeyValueListKey:string = 'DBKeyValues';
-    private KeyValueList: string[];
+import {Contacto, MainDB} from "./class";
 
-    constructor() {
-        if (!Boolean(localStorage.getItem(this.DBKeyValueListKey))) {
-            // si existe... entonces ?... restaurar.
-
-        }
-        else {
-            // si no existe, crear y restaurar.
-        }
-    }
-}
-
-
-
-
-
-
+let valueDB: MainDB;
 
 function main() {
-    let test: {
-        "firstname": string,
-        "lastname": string,
-        "dni": number,
-        "tel": number,
-        "email": string,
-        "direction": {
-            "name":string,
-            "number": number
+    valueDB = new MainDB();
+
+    console.log(valueDB.keyValueList);
+
+    let test: Contacto = {
+        firstname: "edmundo",
+        lastname: "pedro",
+        dni: 12121212,
+        tel: 1243,
+        email: "hola@asd.com",
+        direction: {
+            name: "pedro sanchez",
+            number: 999
         }
     };
+
+    console.log(JSON.parse(JSON.stringify(test)));
+
+    valueDB.pushToDB(test);
 }
 
 window.onload = main;
 /*
-TODO:   - Definir la DB.
-        - Definir el modelo de objeto.
-        - Funciones:
+TODO:   - Funciones:
             - Añadir al sistema (lista, DB, ul, !incluid ID en la lista!)
             - Remover.
             - Purgar.
@@ -45,19 +34,4 @@ TODO:   - Definir la DB.
         - Comprobaciones:
             - campos repetidos.
             - (...) vacíos.
-
-
-
-
-
-id (DNI)
-{
- firstname: "ex",
- lastname: "xample",
- dni: 123...
- direction: {
-    name:
- }
-
-}
  */
