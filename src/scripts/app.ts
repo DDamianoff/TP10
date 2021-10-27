@@ -7,7 +7,7 @@ let contactUnorderedListHTML: CustomHTMLUlList;
 function main() {
     valueDB = new MainDB();
     contactUnorderedListHTML = new CustomHTMLUlList("contactUnorderedListHTML");
-    let form = <HTMLFormElement>document.getElementById('formContact');
+    let form: HTMLFormElement = <HTMLFormElement>document.getElementById('formContact');
 
     contactUnorderedListHTML.buildListFromLocalStorage(valueDB.keyValueList);
 
