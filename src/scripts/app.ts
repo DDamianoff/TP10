@@ -180,13 +180,7 @@ class Contacto {
 
 window.onload = main;
 /*
-TODO:   - Funciones:
-            - Añadir al sistema (lista, DB, ul, !incluid ID en la lista!)
-                - ul - li: asignar id a cada campo (poder eliminarlo a posteriori).
-            - Remover.
-            - Purgar.
-            - Restaurar.
-        - Comprobaciones:
+TODO:     - Comprobaciones:
             - campos repetidos.
             - (...) vacíos.
 */
