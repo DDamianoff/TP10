@@ -9,13 +9,10 @@ function main() {
     contactUnorderedListHTML = new CustomHTMLUlList("contactUnorderedListHTML");
     let form = <HTMLFormElement>document.getElementById('formContact');
 
-
-
+    contactUnorderedListHTML.buildListFromLocalStorage(valueDB.keyValueList);
 
     // prevenir que el formulario realize el submit y reload de la página.
     form.addEventListener("submit", processForm);
-
-
 }
 
 function checkVoids(valueList: string[]) {
@@ -29,6 +26,13 @@ function checkVoids(valueList: string[]) {
     }
     return returnValue;
 }
+
+// noinspection JSUnusedGlobalSymbols
+function removeAllFromAll() {
+    document.getElementById(contactUnorderedListHTML.ulId).innerHTML = '';
+    valueDB.clearAll();
+}
+
 
 function processForm(event) {
     if (event.preventDefault) event.preventDefault();
@@ -46,8 +50,8 @@ function processForm(event) {
     let currentValue: Contacto = {
         firstname: (<HTMLInputElement>form[1]).value,
         lastname: (<HTMLInputElement>form[2]).value,
-        dni: Number((<HTMLInputElement>form[3]).value),
-        tel: (<HTMLInputElement>form[4]).value,
+        dni: Number((<HTMLInputElement>form[4]).value),
+        tel: (<HTMLInputElement>form[3]).value,
         email: (<HTMLInputElement>form[5]).value,
         direction: {
             name: (<HTMLInputElement>form[7]).value,
@@ -55,6 +59,7 @@ function processForm(event) {
         }
     };
 
+    // TODO: fix current validations and add more.
     if(voidCamp) {
         valueDB.pushToDB(currentValue);
         contactUnorderedListHTML.pushToUl(currentValue);
@@ -66,6 +71,15 @@ function processForm(event) {
     // para que el form no recargue.
     return false;
 }
+
+
+function removeFromAll(contactId: string) {
+    document.getElementById(`CID${contactId}`).remove();
+    localStorage.removeItem(contactId);
+    valueDB.restoreKeyValueList();
+}
+
+
 
 class MainDB {
     /*
@@ -105,17 +119,24 @@ class MainDB {
 }
 
 class CustomHTMLUlList {
+
     private ul: HTMLElement;
+    private readonly _ulId: string;
     // recuperar (desde la base de datos) desde un parámetro y ligarse a una ID.
     // remover elemento.
     // añadir elemento.
     constructor(ulID:string) {
         this.ul = document.getElementById(ulID);
+        this._ulId = ulID;
     }
 
-    private buildListFromLocalStorage(keyValueList:string[]) {
-        for (const value in keyValueList) {
-            let currentUser: Contacto = JSON.parse(localStorage.getItem(value));
+    get ulId(): string {
+        return this._ulId;
+    }
+
+    buildListFromLocalStorage(keyValueList:string[]) {
+        for (let i = 0; i < keyValueList.length; i++) {
+            let currentUser: Contacto = JSON.parse(localStorage.getItem(keyValueList[i]));
             this.pushToUl(currentUser);
         }
     }
@@ -125,6 +146,23 @@ class CustomHTMLUlList {
         li.appendChild(document.createTextNode(`${contact}`));
         li.setAttribute('id',`CID${contact.dni}`);
         this.ul.appendChild(li);
+
+        document.getElementById(`CID${contact.dni}`).innerHTML = `
+            <div class="contact">
+                <h3>${contact.firstname} ${contact.lastname} - ${contact.dni}</h3>
+                <h4>Contacto:</h4>
+                <p>
+                    <a href="tel:${contact.tel}">${contact.tel}</a> -
+                    <a href="mailto:${contact.email}">${contact.email}</a>
+                </p>
+
+                <h4>Dirección:</h4>
+                <p>
+                    <span> calle: ${contact.direction.name}</span> - <span>Nº ${contact.direction.number}</span>
+                </p>
+                
+                <input type="button" onclick="removeFromAll('${contact.dni}')" value="remover"/>
+            </div>`;
     }
 }
 
@@ -151,4 +189,4 @@ TODO:   - Funciones:
         - Comprobaciones:
             - campos repetidos.
             - (...) vacíos.
- */
+*/

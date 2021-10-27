@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!--TODO: meta-->
-    <script type="module" src="src/scripts/app.js"></script>
+    <script type="text/javascript" src="src/scripts/app.js"></script>
 </head>
 <body>
 <!--TODO: Estructura del HTML-->
@@ -14,15 +14,6 @@
         </header>
         <main>
             <section>
-                <!--
-                nombre      string
-                apellido    string
-                dni         number
-                tel         number
-                email       string
-                dir.name    string
-                dir.num     num
-                -->
                 <h2>Añadir nuevo contacto:</h2>
 
                 <form id="formContact" method="post" action="">
@@ -58,9 +49,40 @@
                     <button type="submit">añadir</button>
                     <button type="reset">limpiar</button>
                 </form>
-                
-                <ol id="contactUnorderedListHTML"></ol>
+                <!--
+                nombre      string
+                apellido    string
+                dni         number
+                tel         number
+                email       string
+                dir.name    string
+                dir.num     num
+                -->
             </section>
+            <section>
+                <h2>Lista de contactos:</h2>
+                <input type="button" id="btnClearAll" onclick="removeAllFromAll()" value="limpiar" />
+                <ul id="contactUnorderedListHTML">
+                <!--
+                    <li id="test">
+                        <div class="contact">
+                            <h3>[[Juan]] [[Pérez]] - [[43567889]]</h3>
+                            <h4>Contacto:</h4>
+                            <p>
+                                <a href="tel:[[+5438167678899]]">[[+5438167678899]]</a> -
+                                <a href="mailto:[[juan.perez@mail.com]]">[[juan.perez@mail.com]]</a>
+                            </p>
+
+                            <h4>Dirección:</h4>
+                            <p>
+                                <span> calle: [[Los Alisos]]</span> - <span>Nº [[34]]</span>
+                            </p>
+                        </div>
+                    </li>
+                -->
+                </ul>
+            </section>
+
         </main>
 
         <footer>:(</footer>
