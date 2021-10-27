@@ -29,6 +29,7 @@ function checkVoids(valueList: string[]) {
 
 // noinspection JSUnusedGlobalSymbols
 function removeAllFromAll() {
+    // TODO: make this a method of CustomHTMLUlList.
     document.getElementById(contactUnorderedListHTML.ulId).innerHTML = '';
     valueDB.clearAll();
 }
@@ -183,4 +184,5 @@ window.onload = main;
 TODO:     - Comprobaciones:
             - campos repetidos.
             - (...) vacíos.
+          - confirmaciones.
 */
