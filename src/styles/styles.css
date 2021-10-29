@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;600&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #505050;
+  color: #ceb9b9;
+}
+
+.main-container {
+  max-width: 800px;
+  min-width: 120px;
+  margin: auto;
+  background-color: #212020;
+  padding: 32px;
+}
+.main-container section input#btnClearAll {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 20px;
+}
+
+header {
+  text-align: center;
+  padding: 5em;
+}
+
+.standard-input, form fieldset fieldset input, form fieldset label input {
+  display: block;
+  background-color: #ceb9b9;
+  border-radius: 9.6px;
+  padding: 6px;
+}
+
+.standard-button-input, .contact input, .button-section-container div input, .main-container section input#btnClearAll {
+  padding: 10px;
+  background-color: #ceb9b9;
+  cursor: pointer;
+}
+
+form fieldset {
+  padding: 16px;
+  border-radius: 9.6px;
+}
+form fieldset legend {
+  text-align: center;
+  font-weight: 600;
+  padding: 10px;
+  font-size: 20px;
+}
+form fieldset label {
+  margin-top: 6.4px;
+  display: block;
+}
+.button-section-container {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+}
+.button-section-container div {
+  margin-left: auto;
+  display: flex;
+}
+.contact {
+  border: 1px solid #ceb9b9;
+  padding: 32px;
+  margin-top: 16px;
+  border-radius: 20px;
+}
+.contact h3 {
+  text-align: right;
+}
+.contact h4 {
+  margin-top: 10px;
+}
+.contact input {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 20px;
+}
+
+/*# sourceMappingURL=styles.css.map */

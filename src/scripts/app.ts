@@ -2,8 +2,6 @@
 let valueDB: MainDB;
 let contactUnorderedListHTML: CustomHTMLUlList;
 
-// TODO: validaciones de campos usando regex.
-// TODO: https://stackoverflow.com/questions/5384712/intercept-a-form-submit-in-javascript-and-prevent-normal-submission
 function main() {
     valueDB = new MainDB();
     contactUnorderedListHTML = new CustomHTMLUlList("contactUnorderedListHTML");
@@ -21,34 +19,64 @@ function checkVoids(valueList: string[]) {
     a void value.
     */
     let returnValue: boolean = false;
-    for (let value in valueList) {
-        if (Boolean(value)) returnValue = true;
+    for (let i = 0; i < valueList.length; i++) {
+        if (!Boolean(valueList[i])) returnValue = true;
     }
     return returnValue;
 }
 
-// noinspection JSUnusedGlobalSymbols
-function removeAllFromAll() {
-    // TODO: make this a method of CustomHTMLUlList.
-    document.getElementById(contactUnorderedListHTML.ulId).innerHTML = '';
-    valueDB.clearAll();
+function checkRepeatedValues (posibleContact: Contacto) {
+    /*
+    Returns "true" if finds
+    a repeated value.
+    */
+
+    // TODO: Keep loaded this data in the TB.
+    let dniList: string[] = [];
+    let telList: string[] = [];
+    let mailList: string[] = [];
+
+    for (let i = 0; i < valueDB.keyValueList.length; i++) {
+        let currentValue: Contacto = JSON.parse(localStorage.getItem(valueDB.keyValueList[i]));
+        dniList.push(String(currentValue.dni));
+        telList.push(String(currentValue.tel));
+        mailList.push(String(currentValue.email));
+    }
+
+    return  dniList.includes(String(posibleContact.dni)) ||
+            telList.includes(String(posibleContact.tel)) ||
+            mailList.includes(String(posibleContact.email));
 }
 
 
+// noinspection JSUnusedGlobalSymbols
+function removeAllFromAll() {
+    if (window.confirm('¿Desea remover todos los contactos?')) {
+        // TODO: make this a method of CustomHTMLUlList.
+        document.getElementById(contactUnorderedListHTML.ulId).innerHTML = '';
+        valueDB.clearAll();
+    }
+}
+
 function processForm(event) {
-    if (event.preventDefault) event.preventDefault();
     let form: HTMLFormElement = <HTMLFormElement>document.getElementById('formContact');
-    let voidCamp: boolean = checkVoids(<string[]>[
+    let voidCamp: boolean;
+    let repeatedCamp: boolean;
+    let currentValue: Contacto;
+
+    if (event.preventDefault) event.preventDefault();
+
+    voidCamp = checkVoids(<string[]>[
         (<HTMLInputElement>form[1]).value,
         (<HTMLInputElement>form[2]).value,
         (<HTMLInputElement>form[3]).value,
         (<HTMLInputElement>form[4]).value,
         (<HTMLInputElement>form[5]).value,
         (<HTMLInputElement>form[7]).value,
-        (<HTMLInputElement>form[8]).value,
+        (<HTMLInputElement>form[8]).value
     ]);
 
-    let currentValue: Contacto = {
+    currentValue = {
         firstname: (<HTMLInputElement>form[1]).value,
         lastname: (<HTMLInputElement>form[2]).value,
         dni: Number((<HTMLInputElement>form[4]).value),
@@ -60,10 +88,18 @@ function processForm(event) {
         }
     };
 
+    repeatedCamp = checkRepeatedValues(currentValue);
+
+
     // TODO: fix current validations and add more.
-    if(voidCamp) {
-        valueDB.pushToDB(currentValue);
-        contactUnorderedListHTML.pushToUl(currentValue);
+    if(!voidCamp) {
+        if (!repeatedCamp) {
+            valueDB.pushToDB(currentValue);
+            contactUnorderedListHTML.pushToUl(currentValue);
+        }
+        else {
+            alert("valor ingresado con anterioridad");
+        }
     }
     else {
         alert("campo vacío");
@@ -73,14 +109,13 @@ function processForm(event) {
     return false;
 }
 
-
 function removeFromAll(contactId: string) {
-    document.getElementById(`CID${contactId}`).remove();
-    localStorage.removeItem(contactId);
-    valueDB.restoreKeyValueList();
+    if (window.confirm('¿Desea remover el contacto?')) {
+        document.getElementById(`CID${contactId}`).remove();
+        localStorage.removeItem(contactId);
+        valueDB.restoreKeyValueList();
+    }
 }
-
-
 
 class MainDB {
     /*
@@ -137,7 +172,7 @@ class CustomHTMLUlList {
 
     buildListFromLocalStorage(keyValueList:string[]) {
         for (let i = 0; i < keyValueList.length; i++) {
-            let currentUser: Contacto = JSON.parse(localStorage.getItem(keyValueList[i]));
+            let currentUser: Contacto = JSON.parse(localStorage.getItem(valueDB.keyValueList[i]));
             this.pushToUl(currentUser);
         }
     }
@@ -180,9 +215,3 @@ class Contacto {
 }
 
 window.onload = main;
-/*
-TODO:     - Comprobaciones:
-            - campos repetidos.
-            - (...) vacíos.
-          - confirmaciones.
-*/

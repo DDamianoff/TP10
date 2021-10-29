@@ -16,31 +16,56 @@ function checkVoids(valueList) {
     a void value.
     */
     let returnValue = false;
-    for (let value in valueList) {
-        if (Boolean(value))
+    for (let i = 0; i < valueList.length; i++) {
+        if (!Boolean(valueList[i]))
             returnValue = true;
     }
     return returnValue;
 }
+function checkRepeatedValues(posibleContact) {
+    /*
+    Returns "true" if finds
+    a repeated value.
+    */
+    // TODO: Keep loaded this data in the TB.
+    let dniList = [];
+    let telList = [];
+    let mailList = [];
+    for (let i = 0; i < valueDB.keyValueList.length; i++) {
+        let currentValue = JSON.parse(localStorage.getItem(valueDB.keyValueList[i]));
+        dniList.push(String(currentValue.dni));
+        telList.push(String(currentValue.tel));
+        mailList.push(String(currentValue.email));
+    }
+    return dniList.includes(String(posibleContact.dni)) ||
+        telList.includes(String(posibleContact.tel)) ||
+        mailList.includes(String(posibleContact.email));
+}
 // noinspection JSUnusedGlobalSymbols
 function removeAllFromAll() {
-    document.getElementById(contactUnorderedListHTML.ulId).innerHTML = '';
-    valueDB.clearAll();
+    if (window.confirm('¿Desea remover todos los contactos?')) {
+        // TODO: make this a method of CustomHTMLUlList.
+        document.getElementById(contactUnorderedListHTML.ulId).innerHTML = '';
+        valueDB.clearAll();
+    }
 }
 function processForm(event) {
+    let form = document.getElementById('formContact');
+    let voidCamp;
+    let repeatedCamp;
+    let currentValue;
     if (event.preventDefault)
         event.preventDefault();
-    let form = document.getElementById('formContact');
-    let voidCamp = checkVoids([
+    voidCamp = checkVoids([
         form[1].value,
         form[2].value,
         form[3].value,
         form[4].value,
         form[5].value,
         form[7].value,
-        form[8].value,
+        form[8].value
     ]);
-    let currentValue = {
+    currentValue = {
         firstname: form[1].value,
         lastname: form[2].value,
         dni: Number(form[4].value),
@@ -51,10 +76,16 @@ function processForm(event) {
             number: Number(form[8].value)
         }
     };
+    repeatedCamp = checkRepeatedValues(currentValue);
     // TODO: fix current validations and add more.
-    if (voidCamp) {
-        valueDB.pushToDB(currentValue);
-        contactUnorderedListHTML.pushToUl(currentValue);
+    if (!voidCamp) {
+        if (!repeatedCamp) {
+            valueDB.pushToDB(currentValue);
+            contactUnorderedListHTML.pushToUl(currentValue);
+        }
+        else {
+            alert("valor ingresado con anterioridad");
+        }
     }
     else {
         alert("campo vacío");
@@ -63,9 +94,11 @@ function processForm(event) {
     return false;
 }
 function removeFromAll(contactId) {
-    document.getElementById(`CID${contactId}`).remove();
-    localStorage.removeItem(contactId);
-    valueDB.restoreKeyValueList();
+    if (window.confirm('¿Desea remover el contacto?')) {
+        document.getElementById(`CID${contactId}`).remove();
+        localStorage.removeItem(contactId);
+        valueDB.restoreKeyValueList();
+    }
 }
 class MainDB {
     constructor() {
@@ -105,7 +138,7 @@ class CustomHTMLUlList {
     }
     buildListFromLocalStorage(keyValueList) {
         for (let i = 0; i < keyValueList.length; i++) {
-            let currentUser = JSON.parse(localStorage.getItem(keyValueList[i]));
+            let currentUser = JSON.parse(localStorage.getItem(valueDB.keyValueList[i]));
             this.pushToUl(currentUser);
         }
     }
@@ -139,5 +172,6 @@ window.onload = main;
 TODO:     - Comprobaciones:
             - campos repetidos.
             - (...) vacíos.
+          - confirmaciones.
 */ 
 //# sourceMappingURL=app.js.map
